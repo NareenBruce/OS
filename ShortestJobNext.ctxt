@@ -1,0 +1,7 @@
+#BlueJ class context
+comment0.target=ShortestJobNext
+comment1.params=args
+comment1.target=void\ main(java.lang.String[])
+comment2.params=n\ arrivalTimes\ burstTimes\ completionTimes\ turnaroundTimes\ waitingTimes\ isCompleted
+comment2.target=void\ sjfScheduling(int,\ int[],\ int[],\ int[],\ int[],\ int[],\ boolean[])
+numComments=3
