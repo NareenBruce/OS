@@ -106,8 +106,6 @@ public class ProcessScheduler extends JFrame{
         }
         return result.toString();
 
-
-
     }
 
     private void display(ArrayList<GanttEntry> ganttChart, ArrayList<Process> processes) {
@@ -135,17 +133,28 @@ public class ProcessScheduler extends JFrame{
                 String.format("P%d(%d)", entry.getProcessId(), entry.getTimeQuantum()));
             sequenceLabel.setFont(PROCESS_FONT);
             processSequencePanel.add(sequenceLabel);
-            
+           
+            int burstTime = 0;
+            for (Process process : processes) {
+                if (process.getId() == entry.getProcessId()) {
+                burstTime = process.getFburstTime();
+                System.out.println(burstTime);
+                break;
+                }
+            }
+
             // Add separator between process labels
             if (ganttChart.indexOf(entry) < ganttChart.size() - 1) {
+                for (int i = 0; i < burstTime; i++) {
                 processSequencePanel.add(new JLabel(" "));
+                }
             }
         }
     
         // Create Gantt chart panel
         JPanel ganttPanel = new JPanel(new GridBagLayout());
         JPanel chartLabelPanel = new JPanel(new BorderLayout());
-        JLabel chartLabel = new JLabel("Round Robin with Quantum 3");
+        JLabel chartLabel = new JLabel("Round Robin with Quantum " + (ganttChart.get(0).getTimeQuantum()));
         chartLabel.setFont(TITLE_FONT);
         chartLabelPanel.add(chartLabel, BorderLayout.WEST);
         chartLabelPanel.add(processSequencePanel, BorderLayout.SOUTH);
@@ -186,8 +195,7 @@ public class ProcessScheduler extends JFrame{
     
             // Add arrival time indicators
             for (Process process : processes) {
-                if (process.getArrivalTime() > entry.getStartTime() && 
-                    process.getArrivalTime() < entry.getEndTime()) {
+                if (process.getArrivalTime() > entry.getStartTime() && process.getArrivalTime() < entry.getEndTime()) {
                     // Create arrival indicator
                     JPanel indicatorPanel = new JPanel(new BorderLayout());
                     indicatorPanel.setPreferredSize(new Dimension(2, CELL_HEIGHT + 20));
@@ -276,7 +284,7 @@ public class ProcessScheduler extends JFrame{
         // Layout assembly
         JPanel chartContainer = new JPanel(new BorderLayout(0, 10));
         chartContainer.add(chartLabelPanel, BorderLayout.NORTH);
-        chartContainer.add(new JScrollPane(ganttPanel), BorderLayout.CENTER);
+        chartContainer.add(ganttPanel, BorderLayout.CENTER);
     
         JPanel tableContainer = new JPanel(new BorderLayout(0, 10));
         tableContainer.add(new JScrollPane(processTable), BorderLayout.CENTER);
