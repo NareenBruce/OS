@@ -216,6 +216,7 @@ public class SchedulingGUI {
             return result.toString();
         }
 
+        //Gantt Chartt
         public String getGanttChart() {
             StringBuilder ganttChart = new StringBuilder("\nGantt Chart:\n");
         
@@ -232,6 +233,7 @@ public class SchedulingGUI {
             }
             ganttChart.append("\n");
         
+            
             // Print time stamps
             currentTime = 0;
             ganttChart.append(currentTime);

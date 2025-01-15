@@ -27,7 +27,7 @@ public class ProcessScheduler extends JFrame{
         inputPanel.add(new JScrollPane(inputArea));
 
         JButton calculateButton = new JButton("Calculate");
-        calculateButton.addActionListener(new RoundRobin());
+        calculateButton.addActionListener(new Calculate());
         controlPanel.add(calculateButton);
 
         this.add(inputPanel, BorderLayout.NORTH);
@@ -36,12 +36,11 @@ public class ProcessScheduler extends JFrame{
         this.setVisible(true);
     }
 
-    //listener button functions for RoundRobin
-    private class RoundRobin implements ActionListener{
+    //listener for calcualte button
+    private class Calculate implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e){
             try{
-                System.out.println("Round Robin");
                 int numProcess= Integer.parseInt(numProcessesField.getText());
                 if  (numProcess < 3 || numProcess > 10){
                     JOptionPane.showMessageDialog(null, "Number of processes must be between 3 and 10.");
@@ -64,8 +63,11 @@ public class ProcessScheduler extends JFrame{
                 }
 
                 ArrayList<GanttEntry> ganttChart = new ArrayList<>();
-                String result = RRscheduleProcesses(processes, timeQuantum, ganttChart);
-                System.out.println(result);
+                ///String result1 = RRscheduleProcesses(processes, timeQuantum, ganttChart);
+                String result2 = PRscheduleProcesses(processes, ganttChart);
+                //System.out.println(result1);
+                System.out.println("--------------------");
+                System.out.println(result2);
                 display(ganttChart, processes);
                 }
             catch(Exception ex){
@@ -76,7 +78,7 @@ public class ProcessScheduler extends JFrame{
     
     //The calculation logic for Round Robin
     private String RRscheduleProcesses(ArrayList<Process> processes, int timeQuantum, ArrayList<GanttEntry> ganttChart) {
-            StringBuilder result = new StringBuilder();
+            StringBuilder result1 = new StringBuilder();
             ArrayList<Process> queue = new ArrayList<>(processes);
     
             int time = 0;
@@ -98,16 +100,17 @@ public class ProcessScheduler extends JFrame{
             }
 
         // Format the Gantt chart result
-        result.append("Gantt Chart:\n");
+        result1.append("Gantt Chart:\n");
         for (GanttEntry entry : ganttChart) {
-            result.append("P").append(entry.getProcessId())
+            result1.append("P").append(entry.getProcessId())
                     .append(" [").append(entry.getStartTime())
                     .append(" - ").append(entry.getEndTime()).append("]\n");
         }
-        return result.toString();
+        return result1.toString();
 
     }
 
+    //The code to display Gantt Chart and Table
     private void display(ArrayList<GanttEntry> ganttChart, ArrayList<Process> processes) {
         // Frame setup
         JFrame chartFrame = new JFrame("Round Robin Gantt Chart");
@@ -313,7 +316,7 @@ public class ProcessScheduler extends JFrame{
         }
         return finishTime;
     }
-    
+
     public int SRT(){
             this.setTitle("SRT Scheduler");
             this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -356,26 +359,52 @@ public class ProcessScheduler extends JFrame{
             return 0;
         }
     
-    public int PrioritySch(){
-            this.setTitle("Non-Preemptive Priority Scheduler");
-            this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            this.setSize(600, 500);
-            JPanel chart = new JPanel();
-            JPanel table = new JPanel();
-
-            chart.setLayout(new GridLayout(1,7));
-
-            chart.add(new JLabel("This is Gantt Chart"));
-
-            table.setLayout(new GridLayout(5,7));
-            table.add(new JLabel("This is the Table"));
-
-            this.add(chart, BorderLayout.NORTH);
-            this.add(table, BorderLayout.CENTER);
-
-            this.setVisible(true);
-            return 0;
+    private String PRscheduleProcesses(ArrayList<Process> processes, ArrayList<GanttEntry> ganttChart) {
+        StringBuilder result2 = new StringBuilder();
+        ArrayList<Process> executed = new ArrayList<>(processes);
+        ArrayList<Integer> executionOrder = new ArrayList<>();
+        ArrayList<Integer> timeStamps = new ArrayList<>();
+        
+        int time = 0;
+        while (!processes.isEmpty()) {
+            Process next = executed.remove(0);
+            for (Process p : processes) {
+                if (next.getArrivalTime() <= time) {
+                    if (next == null || next.getPriority() < next.getPriority()) {
+                        next = p;
+                    }
+                }
+            }
+    
+            if (next != null) {
+                time = Math.max(time, next.getArrivalTime());
+                timeStamps.add(time); // Add start time to time stamps
+                ganttChart.add(new GanttEntry(next.getId(), time, time + next.getBurstTime(), next.getPriority()));
+                time += next.getBurstTime();
+                next.setFinishTime(time);
+                executed.add(next);
+                executionOrder.add(next.getId());
+                processes.remove(next);
+            } else {
+                time++;
+            }
         }
+        // Format the Gantt chart result
+        result2.append("Gantt Chart:\n");
+        for (GanttEntry entry : ganttChart) {
+        result2.append("P").append(entry.getProcessId())
+                .append(" [").append(entry.getStartTime())
+                .append(" - ").append(entry.getEndTime()).append("]\n");
+        }
+
+        // Format the execution order result
+        result2.append("\nExecution Order:\n");
+        for (int id : executionOrder) {
+        result2.append("P").append(id).append(" ");
+        }
+
+        return result2.toString();
+    }
     
         //The main method tha runs the program
         public static void main(String[] args){
@@ -455,6 +484,14 @@ class Process {
 
     public int getPriority(){
         return priority;
+    }
+
+    public int getFinishTime() {
+        return burstTime;
+    }
+
+    public void setFinishTime(int finishTime) {
+        this.burstTime = finishTime;
     }
 
     public void setBurstTime(int burstTime) {
