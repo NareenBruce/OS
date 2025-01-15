@@ -202,7 +202,7 @@ public class SchedulingGUI {
             for (Process process : processes) {
                 totalTAT += process.tat;
                 totalWait += process.wait;
-                result.append(String.format("P%d\t%d\t%d\t%d\t\t%d\t%d\t%d\n",
+                result.append(String.format("P%d\t%d\t%d\t%d\t%d\t%d\t%d\n",
                         process.id, process.arrival, process.burst, process.priority,
                         process.finish, process.tat, process.wait));
             }
