@@ -2,7 +2,10 @@ import java.util.*;
 
 public class ShortestRemainingTime {
     public static List<String> schedule(List<Process> processes) {
-        PriorityQueue<Process> queue = new PriorityQueue<>(Comparator.comparingInt(p -> p.SRTremainingTime));
+        PriorityQueue<Process> queue = new PriorityQueue<>(
+        Comparator.comparingInt((Process p) -> p.SRTremainingTime)
+              .thenComparingInt(p -> p.arrivalTime)
+              );
         int currentTime = 0;
         List<String> ganttChart = new ArrayList<>();
         int index = 0;
