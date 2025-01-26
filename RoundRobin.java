@@ -19,7 +19,7 @@ public class RoundRobin {
 
             if (queue.isEmpty()) {
                 if (index == processes.size()) break; // All processes are done
-                currentTime = processes.get(index).arrivalTime; // Jump to the next arrival time
+                currentTime = processes.get(index).arrivalTime; // Jump to the next arrival time yoyo
                 continue;
             }
 
