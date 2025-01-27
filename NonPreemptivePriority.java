@@ -1,12 +1,17 @@
 import java.util.*;
 
+
 public class NonPreemptivePriority {
     public static List<String> schedule(List<Process> processes) {
+        // Sort the processes by arrival time to ensure they are considered in the correct order
+        processes.sort(Comparator.comparingInt(p -> p.arrivalTime));
+
         PriorityQueue<Process> queue = new PriorityQueue<>(
-        Comparator.comparingInt((Process p) -> p.priority)
-              .thenComparingInt(p -> p.arrivalTime)
+            Comparator.comparingInt((Process p) -> p.priority)
+                .thenComparingInt(p -> p.arrivalTime)
         );
-        int currentTime = 0;
+
+        int currentTime = processes.get(0).arrivalTime; // Start from the first process's arrival time
         List<String> ganttChart = new ArrayList<>();
         int index = 0;
 
@@ -19,7 +24,8 @@ public class NonPreemptivePriority {
 
             if (queue.isEmpty()) {
                 if (index == processes.size()) break; // All processes are done
-                currentTime = processes.get(index).arrivalTime; // Jump to the next arrival time
+                // Jump to the next arrival time if the queue is empty
+                currentTime = processes.get(index).arrivalTime;
                 continue;
             }
 

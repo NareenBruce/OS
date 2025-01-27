@@ -1,9 +1,9 @@
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.*;
 
 public class ProcessSchedulerGUI extends JFrame {
     private JTextField processCountField;
@@ -60,14 +60,8 @@ public class ProcessSchedulerGUI extends JFrame {
         // Run SRT algorithm
         List<String> ganttChart = ShortestRemainingTime.schedule(new ArrayList<>(processes));
 
-        // Collect arrival times for vertical lines
-        List<Integer> arrivalTimes = new ArrayList<>();
-        for (Process p : processes) {
-            arrivalTimes.add(p.arrivalTime);
-        }
-
         // Display Gantt Chart
-        GanttChartPanel ganttChartPanel = new GanttChartPanel(ganttChart, arrivalTimes);
+        GanttChartPanel ganttChartPanel = new GanttChartPanel(ganttChart);
         resultFrame.add(ganttChartPanel, BorderLayout.CENTER);
  
         // Display Process Table and Averages
@@ -96,17 +90,12 @@ public class ProcessSchedulerGUI extends JFrame {
         resultFrame.setSize(800, 600);
         resultFrame.setLayout(new BorderLayout());
 
-        // Collect arrival times for vertical lines
-        List<Integer> arrivalTimes = new ArrayList<>();
-        for (Process p : processes) {
-            arrivalTimes.add(p.arrivalTime);
-        }
 
         // Run SJN algorithm
         List<String> ganttChart = ShortestJobNext.schedule(new ArrayList<>(processes));
 
         // Display Gantt Chart
-        GanttChartPanel ganttChartPanel = new GanttChartPanel(ganttChart, arrivalTimes);
+        GanttChartPanel ganttChartPanel = new GanttChartPanel(ganttChart);
         resultFrame.add(ganttChartPanel, BorderLayout.CENTER);
 
         // Display Process Table and Averages
@@ -138,14 +127,8 @@ public class ProcessSchedulerGUI extends JFrame {
         // Run NPP algorithm
         List<String> ganttChart = NonPreemptivePriority.schedule(new ArrayList<>(processes));
 
-        // Collect arrival times for vertical lines
-        List<Integer> arrivalTimes = new ArrayList<>();
-        for (Process p : processes) {
-            arrivalTimes.add(p.arrivalTime);
-        }
-
         // Display Gantt Chart
-        GanttChartPanel ganttChartPanel = new GanttChartPanel(ganttChart, arrivalTimes);
+        GanttChartPanel ganttChartPanel = new GanttChartPanel(ganttChart);
         resultFrame.add(ganttChartPanel, BorderLayout.CENTER);
 
         // Display Process Table and Averages
@@ -176,15 +159,9 @@ public class ProcessSchedulerGUI extends JFrame {
 
         // Run RR algorithm
         List<String> ganttChart = RoundRobin.schedule(new ArrayList<>(processes), timeQuantum);
-
-        // Collect arrival times for vertical lines
-        List<Integer> arrivalTimes = new ArrayList<>();
-        for (Process p : processes) {
-            arrivalTimes.add(p.arrivalTime);
-        }
-
+        
         // Display Gantt Chart
-        GanttChartPanel ganttChartPanel = new GanttChartPanel(ganttChart, arrivalTimes);
+        GanttChartPanel ganttChartPanel = new GanttChartPanel(ganttChart);
         resultFrame.add(ganttChartPanel, BorderLayout.CENTER);
 
         // Display Process Table and Averages

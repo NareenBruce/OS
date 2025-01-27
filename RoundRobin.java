@@ -6,7 +6,7 @@ public class RoundRobin {
         int currentTime = 0;
         List<String> ganttChart = new ArrayList<>();
 
-        // Add processes to the queue in order of arrival
+        // Sort processes by arrival time
         processes.sort(Comparator.comparingInt(p -> p.arrivalTime));
         int index = 0;
 

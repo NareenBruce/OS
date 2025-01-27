@@ -1,48 +1,28 @@
-import javax.swing.*;
 import java.awt.*;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import javax.swing.*;
 
 class GanttChartPanel extends JPanel {
-    private List<String> ganttChart;
-    private List<Integer> arrivalTimes;
+    private List<String> ganttChart;  // List of process execution info in format "P1(0-4)"
 
-    public GanttChartPanel(List<String> ganttChart, List<Integer> arrivalTimes) {
+    public GanttChartPanel(List<String> ganttChart) {
         this.ganttChart = ganttChart;
-        this.arrivalTimes = arrivalTimes;
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        int x = 50; // Starting x position
-        int y = 50; // Starting y position
+        int x = 50; // Starting x position for the Gantt chart (pixel offset)
+        int y = 50; // Starting y position for the Gantt chart
         int height = 30; // Height of each process block
         int widthScale = 20; // Scale for width (1 unit = 20 pixels)
 
-        // Collect all time labels to avoid duplicates
-        Set<Integer> existingLabels = new HashSet<>();
-        for (String entry : ganttChart) {
-            String[] parts = entry.split("[()\\-]");
-            int start = Integer.parseInt(parts[1]);
-            int end = Integer.parseInt(parts[2]);
-            existingLabels.add(start);
-            existingLabels.add(end);
-        }
-
-        // Draw vertical lines for arrival times
-        g.setColor(Color.BLACK); // Color for vertical lines
-        for (int arrivalTime : arrivalTimes) {
-            int lineX = x + arrivalTime * widthScale;
-            g.drawLine(lineX, y - 10, lineX, y + height + 10); // Draw vertical line
-
-            // Draw arrival time number below the line only if it doesn't already exist
-            if (!existingLabels.contains(arrivalTime)) {
-                g.setColor(Color.BLACK);
-                g.drawString(String.valueOf(arrivalTime), lineX - 5, y + height + 25);
-            }
-        }
+        // Sort the gantt chart by start times for correct ordering
+        ganttChart.sort((entry1, entry2) -> {
+            int start1 = Integer.parseInt(entry1.split("[()\\-]")[1]);
+            int start2 = Integer.parseInt(entry2.split("[()\\-]")[1]);
+            return Integer.compare(start1, start2);
+        });
 
         // Draw Gantt Chart
         for (String entry : ganttChart) {
@@ -50,22 +30,24 @@ class GanttChartPanel extends JPanel {
             String process = parts[0];
             int start = Integer.parseInt(parts[1]);
             int end = Integer.parseInt(parts[2]);
-            int width = (end - start) * widthScale;
+
+            // Adjust the start and end times based on the minimum time
+            int adjustedStart = start;
+            int adjustedEnd = end;
+            int width = (adjustedEnd - adjustedStart) * widthScale;
 
             // Draw process block (gray color)
             g.setColor(Color.GRAY);
-            g.fillRect(x, y, width, height);
+            g.fillRect(x + adjustedStart * widthScale, y, width, height);
             g.setColor(Color.BLACK);
-            g.drawRect(x, y, width, height);
+            g.drawRect(x + adjustedStart * widthScale, y, width, height);
 
             // Draw process label
-            g.drawString(process, x + 5, y + 20);
+            g.drawString(process, x + adjustedStart * widthScale + 5, y + 20);
 
             // Draw time labels
-            g.drawString(String.valueOf(start), x, y + height + 15);
-            g.drawString(String.valueOf(end), x + width, y + height + 15);
-
-            x += width; // Move to the next position
+            g.drawString(String.valueOf(start), x + adjustedStart * widthScale, y + height + 15);
+            g.drawString(String.valueOf(end), x + adjustedEnd * widthScale, y + height + 15);
         }
     }
 }

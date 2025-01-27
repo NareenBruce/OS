@@ -1,14 +1,17 @@
 import java.util.*;
 
+
 public class ShortestJobNext {
     public static List<String> schedule(List<Process> processes) {
-        // PriorityQueue with custom comparator: first compare burst time, then arrival time
+        // Sort processes by arrival time for correct processing order
+        processes.sort(Comparator.comparingInt(p -> p.arrivalTime));
+
         PriorityQueue<Process> queue = new PriorityQueue<>(
             Comparator.comparingInt((Process p) -> p.burstTime)
                       .thenComparingInt(p -> p.arrivalTime)
         );
 
-        int currentTime = 0;
+        int currentTime = processes.get(0).arrivalTime; // Start at the arrival time of the first process
         List<String> ganttChart = new ArrayList<>();
         int index = 0;
 
@@ -21,10 +24,12 @@ public class ShortestJobNext {
 
             if (queue.isEmpty()) {
                 if (index == processes.size()) break; // All processes are done
-                currentTime = processes.get(index).arrivalTime; // Jump to the next arrival time
+                // Jump to the next arrival time if the queue is empty
+                currentTime = processes.get(index).arrivalTime;
                 continue;
             }
 
+            // Process the shortest job in the queue
             Process currentProcess = queue.poll();
             ganttChart.add("P" + currentProcess.id + " (" + currentTime + "-" + (currentTime + currentProcess.burstTime) + ")");
             currentTime += currentProcess.burstTime;
@@ -35,4 +40,7 @@ public class ShortestJobNext {
 
         return ganttChart;
     }
+
+  
 }
+
