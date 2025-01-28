@@ -77,7 +77,9 @@ public class ProcessSchedulerGUI extends JFrame {
         }
         double avgTurnaround = totalTurnaround / processes.size();
         double avgWaiting = totalWaiting / processes.size();
-        tableOutput.append("\nAverage Turnaround Time: " + String.format("%.2f", avgTurnaround) + "\n");
+        tableOutput.append("\nTotal Turnaround Time: " + String.format("%.2f", totalTurnaround) + "\n");
+        tableOutput.append("Total Waiting Time: " + String.format("%.2f", totalWaiting) + "\n");
+        tableOutput.append("Average Turnaround Time: " + String.format("%.2f", avgTurnaround) + "\n");
         tableOutput.append("Average Waiting Time: " + String.format("%.2f", avgWaiting) + "\n");
 
         resultFrame.add(new JScrollPane(tableOutput), BorderLayout.SOUTH);
@@ -111,7 +113,9 @@ public class ProcessSchedulerGUI extends JFrame {
         }
         double avgTurnaround = totalTurnaround / processes.size();
         double avgWaiting = totalWaiting / processes.size();
-        tableOutput.append("\nAverage Turnaround Time: " + String.format("%.2f", avgTurnaround) + "\n");
+        tableOutput.append("\nTotal Turnaround Time: " + String.format("%.2f", totalTurnaround) + "\n");
+        tableOutput.append("Total Waiting Time: " + String.format("%.2f", totalWaiting) + "\n");
+        tableOutput.append("Average Turnaround Time: " + String.format("%.2f", avgTurnaround) + "\n");
         tableOutput.append("Average Waiting Time: " + String.format("%.2f", avgWaiting) + "\n");
 
         resultFrame.add(new JScrollPane(tableOutput), BorderLayout.SOUTH);
@@ -144,7 +148,9 @@ public class ProcessSchedulerGUI extends JFrame {
         }
         double avgTurnaround = totalTurnaround / processes.size();
         double avgWaiting = totalWaiting / processes.size();
-        tableOutput.append("\nAverage Turnaround Time: " + String.format("%.2f", avgTurnaround) + "\n");
+        tableOutput.append("\nTotal  Turnaround Time: " + String.format("%.2f", totalTurnaround) + "\n");
+        tableOutput.append("Total  Waiting Time: " + String.format("%.2f", totalWaiting) + "\n");
+        tableOutput.append("Average Turnaround Time: " + String.format("%.2f", avgTurnaround) + "\n");
         tableOutput.append("Average Waiting Time: " + String.format("%.2f", avgWaiting) + "\n");
 
         resultFrame.add(new JScrollPane(tableOutput), BorderLayout.SOUTH);
@@ -177,7 +183,9 @@ public class ProcessSchedulerGUI extends JFrame {
         }
         double avgTurnaround = totalTurnaround / processes.size();
         double avgWaiting = totalWaiting / processes.size();
-        tableOutput.append("\nAverage Turnaround Time: " + String.format("%.2f", avgTurnaround) + "\n");
+        tableOutput.append("\nTotal Turnaround Time: " + String.format("%.2f", totalTurnaround) + "\n");
+        tableOutput.append("Total Waiting Time: " + String.format("%.2f", totalWaiting) + "\n");
+        tableOutput.append("Average Turnaround Time: " + String.format("%.2f", avgTurnaround) + "\n");
         tableOutput.append("Average Waiting Time: " + String.format("%.2f", avgWaiting) + "\n");
 
         resultFrame.add(new JScrollPane(tableOutput), BorderLayout.SOUTH);
